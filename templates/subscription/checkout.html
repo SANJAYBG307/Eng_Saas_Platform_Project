@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - {{ block.super }}{% endblock %}
+
+{% block extra_js %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Complete Your Purchase</h4>
+                </div>
+                <div class="card-body">
+                    <div id="payment-element"></div>
+                    <button id="submit-payment" class="btn btn-primary btn-lg w-100 mt-4">
+                        <i class="fas fa-lock"></i> Pay ${{ total }}
+                    </button>
+                    <div id="payment-message" class="text-danger mt-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ plan.name }}</span>
+                        <strong>${{ plan.price }}</strong>
+                    </div>
+                    <div class="text-muted small mb-3">{{ plan.billing_period }} billing</div>
+                    
+                    {% if coupon %}
+                    <div class="alert alert-success p-2">
+                        <i class="fas fa-tag"></i> Coupon: {{ coupon.code }}
+                        <div class="text-end">-${{ discount }}</div>
+                    </div>
+                    {% else %}
+                    <form method="post" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            {{ coupon_form.coupon_code }}
+                            <button type="submit" class="btn btn-outline-secondary">Apply</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                    
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total:</strong>
+                        <strong class="text-primary">${{ total }}</strong>
+                    </div>
+                    
+                    {% if plan.trial_days > 0 %}
+                    <div class="alert alert-info mt-3 p-2">
+                        <i class="fas fa-info-circle"></i> {{ plan.trial_days }} days free trial
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-body text-center">
+                    <i class="fas fa-lock text-success fa-3x mb-3"></i>
+                    <h6>Secure Payment</h6>
+                    <p class="small text-muted">Your payment information is encrypted and secure.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const stripe = Stripe('{{ stripe_public_key }}');
+let elements;
+
+initialize();
+
+async function initialize() {
+    const response = await fetch('/subscription/api/create-payment-intent/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            plan_id: '{{ plan.id }}',
+            tenant_id: '{{ tenant.id }}'
+        })
+    });
+    
+    const { clientSecret } = await response.json();
+    
+    elements = stripe.elements({ clientSecret });
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+}
+
+document.getElementById('submit-payment').addEventListener('click', async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+            return_url: window.location.origin + '/subscription/onboarding/',
+        },
+    });
+    
+    if (error) {
+        showMessage(error.message);
+        setLoading(false);
+    }
+});
+
+function showMessage(messageText) {
+    const messageContainer = document.querySelector('#payment-message');
+    messageContainer.textContent = messageText;
+}
+
+function setLoading(isLoading) {
+    const button = document.querySelector('#submit-payment');
+    if (isLoading) {
+        button.disabled = true;
+        button.textContent = 'Processing...';
+    } else {
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-lock"></i> Pay ${{ total }}';
+    }
+}
+</script>
+{% endblock %}

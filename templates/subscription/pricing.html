@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pricing Plans - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pricing-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+    
+    .pricing-card {
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .pricing-card.popular {
+        border-color: #667eea;
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .pricing-card.popular .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .price {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #667eea;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .feature-list li {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .feature-list li i {
+        color: #28a745;
+        margin-right: 10px;
+    }
+    
+    .popular-badge {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        background: #ffc107;
+        color: #000;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pricing-header">
+    <div class="container">
+        <h1 class="display-4 mb-3">Choose Your Perfect Plan</h1>
+        <p class="lead">Transparent pricing. No hidden fees. Cancel anytime.</p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row g-4">
+        {% for plan in plans %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card pricing-card {% if plan.is_popular %}popular{% endif %} position-relative">
+                {% if plan.is_popular %}
+                <span class="popular-badge">MOST POPULAR</span>
+                {% endif %}
+                
+                <div class="card-header text-center py-4">
+                    <h3 class="mb-0">{{ plan.name }}</h3>
+                </div>
+                
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="price">
+                            ${{ plan.price }}
+                        </div>
+                        <div class="text-muted">per {{ plan.billing_period }}</div>
+                    </div>
+                    
+                    <p class="text-muted">{{ plan.description }}</p>
+                    
+                    <ul class="feature-list mt-4">
+                        <li><i class="fas fa-check-circle"></i> Up to {{ plan.max_students }} students</li>
+                        <li><i class="fas fa-check-circle"></i> Up to {{ plan.max_teachers }} teachers</li>
+                        <li><i class="fas fa-check-circle"></i> {{ plan.max_departments }} departments</li>
+                        <li><i class="fas fa-check-circle"></i> {{ plan.max_storage_gb }}GB storage</li>
+                        {% if plan.enable_email %}
+                        <li><i class="fas fa-check-circle"></i> Email notifications</li>
+                        {% endif %}
+                        {% if plan.enable_sms %}
+                        <li><i class="fas fa-check-circle"></i> SMS notifications</li>
+                        {% endif %}
+                        {% if plan.enable_analytics %}
+                        <li><i class="fas fa-check-circle"></i> Advanced analytics</li>
+                        {% endif %}
+                        {% if plan.enable_api_access %}
+                        <li><i class="fas fa-check-circle"></i> API access</li>
+                        {% endif %}
+                        {% if plan.enable_custom_domain %}
+                        <li><i class="fas fa-check-circle"></i> Custom domain</li>
+                        {% endif %}
+                        {% if plan.enable_parent_portal %}
+                        <li><i class="fas fa-check-circle"></i> Parent portal</li>
+                        {% endif %}
+                    </ul>
+                    
+                    {% if plan.trial_days > 0 %}
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-gift"></i> {{ plan.trial_days }} days free trial
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer text-center py-3">
+                    {% if plan.plan_type == 'enterprise' %}
+                    <a href="{% url 'subscription:contact_sales' %}" class="btn btn-outline-primary btn-lg w-100">
+                        Contact Sales
+                    </a>
+                    {% else %}
+                    <a href="{% url 'subscription:signup' %}?plan={{ plan.id }}" class="btn btn-primary btn-lg w-100">
+                        Get Started
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-12 text-center">
+            <h3 class="mb-4">Frequently Asked Questions</h3>
+            
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Can I change my plan later?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            What payment methods do you accept?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We accept all major credit cards (Visa, Mastercard, Amex) via Stripe's secure payment processing.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Is there a setup fee?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            No setup fees! Just pay the monthly subscription fee.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Subscription - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4">Subscription Management</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Current Plan</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>{{ subscription.plan.name }}</h3>
+                            <p class="text-muted">{{ subscription.plan.description }}</p>
+                            <div class="badge bg-{{ subscription.status|yesno:'success,warning,danger' }} mb-2">
+                                {{ subscription.get_status_display }}
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="display-6 text-primary">${{ subscription.plan.price }}</div>
+                            <div class="text-muted">per {{ subscription.plan.billing_period }}</div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Next Billing Date:</strong><br>
+                            {{ subscription.next_billing_date|date:"F d, Y" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Auto Renew:</strong><br>
+                            {{ subscription.auto_renew|yesno:"Enabled,Disabled" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'subscription:pricing' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-up"></i> Upgrade Plan
+                        </a>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                            <i class="fas fa-times"></i> Cancel Subscription
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Payments</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Invoice</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                <tr>
+                                    <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                                    <td>${{ payment.amount }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ payment.status|yesno:'success,danger' }}">
+                                            {{ payment.get_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if payment.invoice %}
+                                        <a href="#">Download</a>
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No payments yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Plan Features</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> {{ subscription.plan.max_students }} Students</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> {{ subscription.plan.max_teachers }} Teachers</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> {{ subscription.plan.max_departments }} Departments</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> {{ subscription.plan.max_storage_gb }}GB Storage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Subscription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'subscription:cancel' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p>We're sorry to see you go! Please let us know why you're canceling.</p>
+                    <!-- Add cancel form fields here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Subscription</button>
+                    <button type="submit" class="btn btn-danger">Cancel Subscription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

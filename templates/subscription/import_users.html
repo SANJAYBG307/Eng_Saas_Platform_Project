@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Import Users - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-upload"></i> Import Users from CSV</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle"></i> CSV Format Requirements</h5>
+                        <p>Your CSV file should have the following columns:</p>
+                        <ul>
+                            <li><strong>email</strong> - User's email address (required)</li>
+                            <li><strong>first_name</strong> - First name (required)</li>
+                            <li><strong>last_name</strong> - Last name (required)</li>
+                            <li><strong>phone</strong> - Phone number (optional)</li>
+                            <li><strong>password</strong> - Initial password (optional, will use default if not provided)</li>
+                        </ul>
+                        <a href="{% static 'sample_import.csv' %}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-download"></i> Download Sample CSV
+                        </a>
+                    </div>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            {{ form.csv_file.label_tag }}
+                            {{ form.csv_file }}
+                            <small class="form-text text-muted">{{ form.csv_file.help_text }}</small>
+                            {% if form.csv_file.errors %}
+                            <div class="text-danger">{{ form.csv_file.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.user_type.label_tag }}
+                            <div>
+                                {% for radio in form.user_type %}
+                                <div class="form-check">
+                                    {{ radio.tag }}
+                                    <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                        {{ radio.choice_label }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            {{ form.send_welcome_email }}
+                            {{ form.send_welcome_email.label }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-upload"></i> Import Users
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

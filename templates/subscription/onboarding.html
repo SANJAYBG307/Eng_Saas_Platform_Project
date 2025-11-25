@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Onboarding - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="text-center mb-5">
+                <h1 class="display-4">Welcome to {{ tenant.name }}!</h1>
+                <p class="lead">Let's get you set up in just a few steps</p>
+                
+                <div class="progress" style="height: 30px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ progress }}%">
+                        {{ progress|floatformat:0 }}% Complete
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100 {% if onboarding_steps.profile_complete %}border-success{% endif %}">
+                        <div class="card-body">
+                            <h4>
+                                {% if onboarding_steps.profile_complete %}
+                                <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                <i class="far fa-circle text-muted"></i>
+                                {% endif %}
+                                Customize Your Profile
+                            </h4>
+                            <p class="text-muted">Upload logo, set colors, and personalize your institution's branding</p>
+                            <a href="{% url 'core:profile' %}" class="btn btn-primary">
+                                {% if onboarding_steps.profile_complete %}Update{% else %}Get Started{% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100 {% if onboarding_steps.departments_added %}border-success{% endif %}">
+                        <div class="card-body">
+                            <h4>
+                                {% if onboarding_steps.departments_added %}
+                                <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                <i class="far fa-circle text-muted"></i>
+                                {% endif %}
+                                Add Departments
+                            </h4>
+                            <p class="text-muted">Set up your academic departments and programs</p>
+                            <a href="{% url 'college_management:dashboard' %}" class="btn btn-primary">
+                                {% if onboarding_steps.departments_added %}Manage{% else %}Add Now{% endif %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100 {% if onboarding_steps.teachers_added %}border-success{% endif %}">
+                        <div class="card-body">
+                            <h4>
+                                {% if onboarding_steps.teachers_added %}
+                                <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                <i class="far fa-circle text-muted"></i>
+                                {% endif %}
+                                Import Teachers
+                            </h4>
+                            <p class="text-muted">Bulk import your teaching staff from CSV</p>
+                            <a href="{% url 'subscription:import_users' %}" class="btn btn-primary">
+                                Import Teachers
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card h-100 {% if onboarding_steps.students_added %}border-success{% endif %}">
+                        <div class="card-body">
+                            <h4>
+                                {% if onboarding_steps.students_added %}
+                                <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                <i class="far fa-circle text-muted"></i>
+                                {% endif %}
+                                Import Students
+                            </h4>
+                            <p class="text-muted">Bulk import your students from CSV</p>
+                            <a href="{% url 'subscription:import_users' %}" class="btn btn-primary">
+                                Import Students
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{% url 'subscription:welcome' %}" class="btn btn-success btn-lg">
+                    <i class="fas fa-check"></i> Finish Setup
+                </a>
+                <br>
+                <a href="{% url 'core:dashboard' %}" class="btn btn-link mt-2">Skip for now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

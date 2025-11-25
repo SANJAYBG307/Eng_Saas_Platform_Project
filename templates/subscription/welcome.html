@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h1 class="display-4 mb-3">You're All Set!</h1>
+                    <p class="lead text-muted">Welcome to {{ tenant.name }}</p>
+                    
+                    <div class="my-4">
+                        <p>Your account is now active and ready to use. Here's what you can do next:</p>
+                    </div>
+                    
+                    <div class="row g-3 mt-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                                    <h5>Manage Users</h5>
+                                    <p class="small text-muted">Add teachers, students, and staff</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <i class="fas fa-book fa-2x text-primary mb-3"></i>
+                                    <h5>Setup Courses</h5>
+                                    <p class="small text-muted">Create subjects and assignments</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100 border">
+                                <div class="card-body">
+                                    <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                                    <h5>View Analytics</h5>
+                                    <p class="small text-muted">Track performance and attendance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <a href="{% url 'core:dashboard' %}" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-home"></i> Go to Dashboard
+                        </a>
+                    </div>
+                    
+                    {% if subscription %}
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-info-circle"></i> 
+                        Your {{ subscription.plan.name }} {% if subscription.is_trial %}trial{% else %}subscription{% endif %} is active
+                        {% if subscription.trial_end_date %}
+                        until {{ subscription.trial_end_date|date:"F d, Y" }}
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

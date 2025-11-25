@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Sales - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h1 class="display-5 mb-4">Let's Talk About Your Needs</h1>
+            <p class="lead text-muted">Our sales team is ready to help you find the perfect solution for your institution.</p>
+            
+            <div class="mt-5">
+                <div class="d-flex align-items-start mb-4">
+                    <i class="fas fa-phone-alt fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5>Call Us</h5>
+                        <p class="text-muted">+1 (555) 123-4567<br>Mon-Fri, 9am-6pm EST</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-start mb-4">
+                    <i class="fas fa-envelope fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5>Email Us</h5>
+                        <p class="text-muted">sales@saasplatform.com</p>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-start mb-4">
+                    <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5>Quick Response</h5>
+                        <p class="text-muted">We typically respond within 24 hours</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Send Us a Message</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            {{ form.name.label_tag }}
+                            {{ form.name }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.phone.label_tag }}
+                            {{ form.phone }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.institution_name.label_tag }}
+                            {{ form.institution_name }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.number_of_students.label_tag }}
+                            {{ form.number_of_students }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.message.label_tag }}
+                            {{ form.message }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
