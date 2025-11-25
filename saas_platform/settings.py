@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     # Third Party Apps
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',
-    'crispy_forms',
-    'crispy_bootstrap5',
-    'django_filters',
-    'guardian',
-    'axes',
+    # 'corsheaders',  # Install later
+    # 'crispy_forms',  # Install later
+    # 'crispy_bootstrap5',  # Install later
+    # 'django_filters',  # Not currently used
+    # 'guardian',  # Install later
+    # 'axes',  # Install later
     
     # Project Core Apps
     'core.apps.CoreConfig',
@@ -63,9 +63,9 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files serving
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files serving - install later
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',  # Install later
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -73,7 +73,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.TenantMiddleware',  # Multi-tenant middleware
     'core.middleware.RoleBasedAccessMiddleware',  # RBAC middleware
-    'axes.middleware.AxesMiddleware',  # Security middleware
+    # 'axes.middleware.AxesMiddleware',  # Security middleware - install later
 ]
 
 ROOT_URLCONF = 'saas_platform.urls'

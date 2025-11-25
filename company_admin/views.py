@@ -12,10 +12,11 @@ from datetime import timedelta
 
 from core.models import Tenant, UserAccount, AuditLog
 from core.decorators import role_required
-from tenant_subscription.models import (
-    Subscription, Payment, Invoice, UsageMetrics,
-    SubscriptionPlan
-)
+# TODO: Import these when tenant_subscription models are built
+# from tenant_subscription.models import (
+#     Subscription, Payment, Invoice, UsageMetrics,
+#     SubscriptionPlan
+# )
 from .models import (
     SupportTicket, TicketComment, SystemSettings,
     SystemMetrics, AnnouncementGlobal
@@ -41,20 +42,13 @@ def dashboard(request):
         is_deleted=False
     ).count()
     
-    # Subscription stats
-    active_subscriptions = Subscription.objects.filter(
-        status='active'
-    ).count()
-    trial_subscriptions = Subscription.objects.filter(
-        status='trialing'
-    ).count()
+    # Subscription stats - TODO: Enable when subscription models are built
+    active_subscriptions = 0  # Subscription.objects.filter(status='active').count()
+    trial_subscriptions = 0  # Subscription.objects.filter(status='trialing').count()
     
-    # Revenue (last 30 days)
+    # Revenue (last 30 days) - TODO: Enable when payment models are built
     thirty_days_ago = timezone.now() - timedelta(days=30)
-    recent_revenue = Payment.objects.filter(
-        status='succeeded',
-        created_at__gte=thirty_days_ago
-    ).aggregate(total=Sum('amount'))['total'] or 0
+    recent_revenue = 0  # Payment.objects.filter(...).aggregate(total=Sum('amount'))['total'] or 0
     
     # Open support tickets
     open_tickets = SupportTicket.objects.filter(

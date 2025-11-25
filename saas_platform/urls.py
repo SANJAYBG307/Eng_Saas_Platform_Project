@@ -16,36 +16,36 @@ urlpatterns = [
     path('auth/', include('core.urls', namespace='auth')),
     
     # Company Admin App (Super Admin)
-    path('company/', include('company_admin.urls', namespace='company')),
+    path('company/', include('company_admin.urls', namespace='company_admin')),
     
-    # Tenant Subscription App (Public)
-    path('', include('tenant_subscription.urls', namespace='subscription')),
+    # Tenant Subscription App (Public) - TODO: Build models
+    # path('', include('tenant_subscription.urls', namespace='subscription')),
     
-    # College Management App (Tenant Admin)
-    path('admin/', include('college_management.urls', namespace='college')),
+    # College Management App (Tenant Admin) - TODO: Build
+    # path('admin/', include('college_management.urls', namespace='college')),
     
-    # Department Management App (Department Admin/HOD)
-    path('dept/', include('department_management.urls', namespace='department')),
+    # Department Management App (Department Admin/HOD) - TODO: Build
+    # path('dept/', include('department_management.urls', namespace='department')),
     
-    # Teacher App
-    path('teacher/', include('teacher.urls', namespace='teacher')),
+    # Teacher App - TODO: Build
+    # path('teacher/', include('teacher.urls', namespace='teacher')),
     
-    # Student App
-    path('student/', include('student.urls', namespace='student')),
+    # Student App - TODO: Build
+    # path('student/', include('student.urls', namespace='student')),
     
-    # Parent App
-    path('parent/', include('parent.urls', namespace='parent')),
+    # Parent App - TODO: Build
+    # path('parent/', include('parent.urls', namespace='parent')),
     
-    # API Endpoints (if using DRF)
-    path('api/', include([
-        path('auth/', include('core.api.urls')),
-        path('company/', include('company_admin.api.urls')),
-        path('college/', include('college_management.api.urls')),
-        path('department/', include('department_management.api.urls')),
-        path('teacher/', include('teacher.api.urls')),
-        path('student/', include('student.api.urls')),
-        path('parent/', include('parent.api.urls')),
-    ])),
+    # API Endpoints (if using DRF) - TODO: Build APIs
+    # path('api/', include([
+    #     path('auth/', include('core.api.urls')),
+    #     path('company/', include('company_admin.api.urls')),
+    #     path('college/', include('college_management.api.urls')),
+    #     path('department/', include('department_management.api.urls')),
+    #     path('teacher/', include('teacher.api.urls')),
+    #     path('student/', include('student.api.urls')),
+    #     path('parent/', include('parent.api.urls')),
+    # ])),
 ]
 
 # Serve static and media files in development
