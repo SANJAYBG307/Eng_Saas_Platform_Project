@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tenant.name }} - Tenant Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-building"></i> {{ tenant.name }}</h1>
+        <a href="{% url 'company_admin:tenant_list' %}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <!-- Tenant Info -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-info-circle"></i> Tenant Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Name:</th>
+                            <td>{{ tenant.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Subdomain:</th>
+                            <td><code>{{ tenant.subdomain }}.yourdomain.com</code></td>
+                        </tr>
+                        <tr>
+                            <th>Contact Email:</th>
+                            <td>{{ tenant.contact_email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Contact Phone:</th>
+                            <td>{{ tenant.contact_phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="badge bg-{{ tenant.is_active|yesno:'success,secondary' }}">
+                                    {{ tenant.is_active|yesno:'Active,Inactive' }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Created:</th>
+                            <td>{{ tenant.created_at|date:'F d, Y H:i' }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-credit-card"></i> Subscription Info</h5>
+                </div>
+                <div class="card-body">
+                    {% if subscription %}
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Plan:</th>
+                            <td>{{ subscription.plan.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                <span class="badge bg-{{ subscription.status|yesno:'success,warning,danger' }}">
+                                    {{ subscription.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Start Date:</th>
+                            <td>{{ subscription.start_date|date:'M d, Y' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Next Billing:</th>
+                            <td>{{ subscription.current_period_end|date:'M d, Y' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount:</th>
+                            <td>${{ subscription.plan.price }}</td>
+                        </tr>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">No active subscription</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5><i class="fas fa-users"></i> Recent Users</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.get_full_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td><span class="badge bg-info">{{ user.role.name }}</span></td>
+                            <td>
+                                <span class="badge bg-{{ user.is_active|yesno:'success,secondary' }}">
+                                    {{ user.is_active|yesno:'Active,Inactive' }}
+                                </span>
+                            </td>
+                            <td>{{ user.created_at|date:'M d, Y' }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No users found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5><i class="fas fa-dollar-sign"></i> Recent Payments</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.created_at|date:'M d, Y' }}</td>
+                            <td>${{ payment.amount }}</td>
+                            <td>
+                                <span class="badge bg-{{ payment.status|yesno:'success,warning,danger' }}">
+                                    {{ payment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ payment.payment_method }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No payments found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Tickets -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5><i class="fas fa-ticket-alt"></i> Recent Support Tickets</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Ticket #</th>
+                            <th>Subject</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td><code>{{ ticket.ticket_number }}</code></td>
+                            <td>{{ ticket.subject|truncatewords:10 }}</td>
+                            <td><span class="badge bg-warning">{{ ticket.get_priority_display }}</span></td>
+                            <td><span class="badge bg-info">{{ ticket.get_status_display }}</span></td>
+                            <td>{{ ticket.created_at|date:'M d, Y' }}</td>
+                            <td>
+                                <a href="{% url 'company_admin:ticket_detail' ticket.id %}" class="btn btn-sm btn-primary">View</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No support tickets</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

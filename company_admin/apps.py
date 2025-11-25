@@ -4,3 +4,5 @@ from django.apps import AppConfig
 class CompanyAdminConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'company_admin'
+    verbose_name = 'Company Administration'
+    name = 'company_admin'

@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics & Reporting{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chart-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h1 class="mb-4">
+        <i class="fas fa-chart-line"></i> Analytics & Reporting
+    </h1>
+
+    <!-- Revenue by Plan -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5>Revenue by Plan (Last 30 Days)</h5>
+                <canvas id="revenueByPlanChart" height="200"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-card">
+                <h5>Active Subscriptions by Plan</h5>
+                <canvas id="planDistributionChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tenant Growth -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-card">
+                <h5>Tenant Growth (Last 30 Days)</h5>
+                <canvas id="tenantGrowthChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Trend -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-card">
+                <h5>Revenue Trend (Last 30 Days)</h5>
+                <canvas id="revenueTrendChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5><i class="fas fa-table"></i> Revenue Summary by Plan</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Plan</th>
+                            <th>Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in revenue_by_plan %}
+                        <tr>
+                            <td>{{ item.subscription__plan__name }}</td>
+                            <td>${{ item.total|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center text-muted">No data available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Revenue by Plan
+    const revenueByPlan = {{ revenue_by_plan|safe }};
+    if (revenueByPlan.length > 0) {
+        new Chart(document.getElementById('revenueByPlanChart'), {
+            type: 'bar',
+            data: {
+                labels: revenueByPlan.map(r => r.subscription__plan__name),
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: revenueByPlan.map(r => r.total),
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
+    // Plan Distribution
+    const planDistribution = {{ plan_distribution|safe }};
+    if (planDistribution.length > 0) {
+        new Chart(document.getElementById('planDistributionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: planDistribution.map(p => p.plan__name),
+                datasets: [{
+                    data: planDistribution.map(p => p.count),
+                    backgroundColor: ['#667eea', '#38ef7d', '#f5576c', '#ffc107', '#17a2b8']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
+    // Tenant Growth
+    const tenantGrowth = {{ tenant_growth|safe }};
+    if (tenantGrowth.length > 0) {
+        new Chart(document.getElementById('tenantGrowthChart'), {
+            type: 'line',
+            data: {
+                labels: tenantGrowth.map(t => t.date),
+                datasets: [
+                    {
+                        label: 'Total Tenants',
+                        data: tenantGrowth.map(t => t.total),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Active Tenants',
+                        data: tenantGrowth.map(t => t.active),
+                        borderColor: '#38ef7d',
+                        backgroundColor: 'rgba(56, 239, 125, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+
+    // Revenue Trend
+    const revenueTrend = {{ revenue_trend|safe }};
+    if (revenueTrend.length > 0) {
+        new Chart(document.getElementById('revenueTrendChart'), {
+            type: 'line',
+            data: {
+                labels: revenueTrend.map(r => r.date),
+                datasets: [{
+                    label: 'Daily Revenue ($)',
+                    data: revenueTrend.map(r => r.revenue),
+                    borderColor: '#f5576c',
+                    backgroundColor: 'rgba(245, 87, 108, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

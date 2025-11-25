@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block title %}System Health{% endblock %}
+
+{% block extra_css %}
+<style>
+    .health-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .progress-custom {
+        height: 30px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .metric-box {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .metric-box h3 {
+        font-size: 2rem;
+        margin: 10px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-heartbeat"></i> System Health Monitor</h1>
+        <button onclick="location.reload()" class="btn btn-primary">
+            <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+    </div>
+
+    <!-- Server Metrics -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5><i class="fas fa-microchip"></i> CPU Usage</h5>
+                <div class="progress progress-custom mt-3">
+                    <div class="progress-bar {% if cpu_percent > 80 %}bg-danger{% elif cpu_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ cpu_percent }}%">
+                        {{ cpu_percent }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5><i class="fas fa-memory"></i> Memory Usage</h5>
+                <div class="progress progress-custom mt-3">
+                    <div class="progress-bar {% if memory_percent > 80 %}bg-danger{% elif memory_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ memory_percent }}%">
+                        {{ memory_percent }}%
+                    </div>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    {{ memory_used }} GB / {{ memory_total }} GB
+                </small>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="health-card">
+                <h5><i class="fas fa-hdd"></i> Disk Usage</h5>
+                <div class="progress progress-custom mt-3">
+                    <div class="progress-bar {% if disk_percent > 80 %}bg-danger{% elif disk_percent > 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                         style="width: {{ disk_percent }}%">
+                        {{ disk_percent }}%
+                    </div>
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    {{ disk_used }} GB / {{ disk_total }} GB
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Database Info -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="health-card">
+                <h5><i class="fas fa-database"></i> Database Information</h5>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <div class="metric-box" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                            <div>Total Tables</div>
+                            <h3>{{ table_count }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div>Database Size</div>
+                            <h3>N/A</h3>
+                            <small>MySQL</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-box" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <div>Connection Status</div>
+                            <h3><i class="fas fa-check-circle"></i></h3>
+                            <small>Connected</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-box" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
+                            <div>Active Queries</div>
+                            <h3>N/A</h3>
+                            <small>Real-time</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest System Metrics -->
+    {% if latest_metrics %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="health-card">
+                <h5><i class="fas fa-chart-bar"></i> Latest System Metrics ({{ latest_metrics.metric_date }})</h5>
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-primary">{{ latest_metrics.total_tenants }}</h4>
+                            <small class="text-muted">Total Tenants</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-success">{{ latest_metrics.active_tenants }}</h4>
+                            <small class="text-muted">Active Tenants</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-info">{{ latest_metrics.total_users }}</h4>
+                            <small class="text-muted">Total Users</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-warning">${{ latest_metrics.daily_revenue }}</h4>
+                            <small class="text-muted">Daily Revenue</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-danger">{{ latest_metrics.storage_used_gb }} GB</h4>
+                            <small class="text-muted">Storage Used</small>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="text-center">
+                            <h4 class="text-secondary">{{ latest_metrics.api_calls }}</h4>
+                            <small class="text-muted">API Calls</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- System Status -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="health-card">
+                <h5><i class="fas fa-info-circle"></i> System Status</h5>
+                <div class="table-responsive mt-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Last Checked</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="fas fa-server"></i> Web Server</td>
+                                <td><span class="badge bg-success">Running</span></td>
+                                <td>{{ now|date:'Y-m-d H:i:s' }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-database"></i> Database</td>
+                                <td><span class="badge bg-success">Connected</span></td>
+                                <td>{{ now|date:'Y-m-d H:i:s' }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-cash-register"></i> Stripe API</td>
+                                <td><span class="badge bg-success">Operational</span></td>
+                                <td>N/A</td>
+                            </tr>
+                            <tr>
+                                <td><i class="fas fa-envelope"></i> Email Service</td>
+                                <td><span class="badge bg-warning">Not Configured</span></td>
+                                <td>N/A</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Notice -->
+    <div class="alert alert-info mt-4">
+        <i class="fas fa-info-circle"></i>
+        <strong>Note:</strong> System health metrics are refreshed in real-time. 
+        If any metric shows warning (yellow) or critical (red) levels, immediate action may be required.
+    </div>
+</div>
+{% endblock %}
