@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Classes{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">My Classes</h2>
+            <p class="text-muted">Sections you are teaching</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        {% for section in sections %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ section.name }}</h5>
+                            <span class="badge bg-primary">{{ section.academic_year.name }}</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <p class="mb-1 text-muted small">Department</p>
+                            <p class="mb-0">{{ section.department.name }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="mb-1 text-muted small">Total Students</p>
+                            <p class="mb-0 fs-4 fw-bold text-primary">{{ section.students.count }}</p>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="mb-1 text-muted small">Class Teacher</p>
+                            <p class="mb-0">{{ section.class_teacher.get_full_name|default:"Not Assigned" }}</p>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'teacher:attendance_marking' %}?section={{ section.id }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-calendar-check me-1"></i>Mark Attendance
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No classes assigned yet.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

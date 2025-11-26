@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Mark Attendance</h2>
+            <p class="text-muted">Record student attendance</p>
+        </div>
+    </div>
+
+    {% if not section %}
+        <!-- Selection Form -->
+        <div class="row">
+            <div class="col-md-8 col-lg-6 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <form method="get">
+                            <div class="mb-3">
+                                <label class="form-label">Select Section</label>
+                                <select name="section" class="form-select" required>
+                                    <option value="">Choose section...</option>
+                                    {% for sec in sections %}
+                                        <option value="{{ sec.id }}">{{ sec.name }} ({{ sec.department.name }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Select Subject</label>
+                                <select name="subject" class="form-select" required>
+                                    <option value="">Choose subject...</option>
+                                    {% for subj in subjects %}
+                                        <option value="{{ subj.id }}">{{ subj.name }} ({{ subj.code }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Date</label>
+                                <input type="date" name="date" class="form-control" value="{{ today }}" max="{{ today }}" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search me-2"></i>Load Students
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Attendance Marking Form -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="mb-0 fw-bold">{{ section.name }} - {{ subject.name }}</h5>
+                                <small class="text-muted">{{ date }}</small>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{% url 'teacher:attendance_marking' %}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>Back
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="section" value="{{ section.id }}">
+                            <input type="hidden" name="subject" value="{{ subject.id }}">
+                            <input type="hidden" name="date" value="{{ date }}">
+
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Roll No</th>
+                                            <th>Student Name</th>
+                                            <th width="15%">Present</th>
+                                            <th width="15%">Absent</th>
+                                            <th width="15%">Late</th>
+                                            <th width="15%">Excused</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in students %}
+                                            <tr>
+                                                <td>{{ student.roll_number }}</td>
+                                                <td>{{ student.get_full_name }}</td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status_{{ student.id }}" value="present" required>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status_{{ student.id }}" value="absent">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status_{{ student.id }}" value="late">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="status_{{ student.id }}" value="excused">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="remarks_{{ student.id }}" class="form-control form-control-sm" placeholder="Optional">
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <button type="button" class="btn btn-outline-primary" onclick="markAll('present')">Mark All Present</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-check-circle me-2"></i>Submit Attendance
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function markAll(status) {
+    const radios = document.querySelectorAll(`input[type="radio"][value="${status}"]`);
+    radios.forEach(radio => radio.checked = true);
+}
+</script>
+{% endblock %}

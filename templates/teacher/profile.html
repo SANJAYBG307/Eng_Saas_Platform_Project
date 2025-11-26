@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">My Profile</h2>
+            <p class="text-muted">View and update your profile information</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-circle fs-1"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold">{{ request.user.get_full_name }}</h4>
+                    <p class="text-muted">{{ request.user.email }}</p>
+                    <span class="badge bg-primary">Teacher</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0 fw-bold">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">First Name</label>
+                            <p class="fw-bold">{{ request.user.first_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Last Name</label>
+                            <p class="fw-bold">{{ request.user.last_name }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Email</label>
+                            <p class="fw-bold">{{ request.user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Phone</label>
+                            <p class="fw-bold">{{ request.user.phone_number|default:"-" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Gender</label>
+                            <p class="fw-bold">{{ request.user.get_gender_display|default:"-" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Date of Birth</label>
+                            <p class="fw-bold">{{ request.user.date_of_birth|default:"-" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small">Address</label>
+                        <p class="fw-bold">{{ request.user.address|default:"-" }}</p>
+                    </div>
+
+                    <button class="btn btn-primary">
+                        <i class="bi bi-pencil me-2"></i>Edit Profile
+                    </button>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0 fw-bold">Teaching Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted small">Employee ID</label>
+                        <p class="fw-bold">{{ request.user.employee_id|default:"-" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small">Department</label>
+                        <p class="fw-bold">{{ request.user.department.name|default:"-" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small">Qualifications</label>
+                        <p class="fw-bold">{{ request.user.qualifications|default:"-" }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted small">Experience</label>
+                        <p class="fw-bold">{{ request.user.experience_years|default:"-" }} years</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

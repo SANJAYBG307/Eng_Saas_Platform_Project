@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Reports</h2>
+            <p class="text-muted">Generate and download reports</p>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>Report generation module coming soon. This will include attendance reports, grade reports, performance reports, and custom report builder.
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-calendar-check text-primary me-2"></i>Attendance Report
+                    </h5>
+                    <p class="text-muted">Generate attendance summary for your classes</p>
+                    <button class="btn btn-outline-primary" disabled>
+                        <i class="bi bi-download me-2"></i>Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-clipboard-check text-success me-2"></i>Grade Report
+                    </h5>
+                    <p class="text-muted">Generate grade summary and statistics</p>
+                    <button class="btn btn-outline-success" disabled>
+                        <i class="bi bi-download me-2"></i>Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-bar-chart text-info me-2"></i>Performance Report
+                    </h5>
+                    <p class="text-muted">Generate comprehensive performance analysis</p>
+                    <button class="btn btn-outline-info" disabled>
+                        <i class="bi bi-download me-2"></i>Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-file-text text-warning me-2"></i>Assignment Report
+                    </h5>
+                    <p class="text-muted">Generate assignment submission report</p>
+                    <button class="btn btn-outline-warning" disabled>
+                        <i class="bi bi-download me-2"></i>Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-people text-danger me-2"></i>Student List
+                    </h5>
+                    <p class="text-muted">Export student list with details</p>
+                    <button class="btn btn-outline-danger" disabled>
+                        <i class="bi bi-download me-2"></i>Generate
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-gear text-secondary me-2"></i>Custom Report
+                    </h5>
+                    <p class="text-muted">Build custom report with filters</p>
+                    <button class="btn btn-outline-secondary" disabled>
+                        <i class="bi bi-plus-circle me-2"></i>Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

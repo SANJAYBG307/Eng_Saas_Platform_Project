@@ -27,7 +27,8 @@ urlpatterns = [
     # Department Management App (Department Admin/HOD)
     path('dept/', include('department_management.urls', namespace='department')),
     
-    # Teacher App - TODO: Build
+    # Teacher App
+    path('teacher/', include('teacher.urls', namespace='teacher'))
     # path('teacher/', include('teacher.urls', namespace='teacher')),
     
     # Student App - TODO: Build

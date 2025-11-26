@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">My Assignments</h2>
+            <p class="text-muted">Manage assignments and submissions</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'teacher:assignment_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Create Assignment
+            </a>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Section</th>
+                            <th>Subject</th>
+                            <th>Due Date</th>
+                            <th>Max Marks</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assignment in assignments %}
+                            <tr>
+                                <td>{{ assignment.title }}</td>
+                                <td>{{ assignment.section.name }}</td>
+                                <td>{{ assignment.subject.name }}</td>
+                                <td>{{ assignment.due_date }}</td>
+                                <td>{{ assignment.max_marks }}</td>
+                                <td>
+                                    <span class="badge bg-{% if assignment.status == 'published' %}success{% elif assignment.status == 'draft' %}secondary{% else %}danger{% endif %}">
+                                        {{ assignment.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'teacher:assignment_submissions' assignment.id %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye me-1"></i>View Submissions
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">No assignments created yet.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if assignments.has_other_pages %}
+                <nav>
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if assignments.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ assignments.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in assignments.paginator.page_range %}
+                            <li class="page-item {% if assignments.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if assignments.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ assignments.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
