@@ -9,9 +9,9 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 from django.db.models import Count, Avg, Q, Sum
 from core.decorators import role_required
-from core.models import Section, Subject, AcademicYear, Announcement
+from core.models import Section, Subject, AcademicYear
 from teacher.models import Attendance, Assignment, AssignmentSubmission, Grade, TeacherResource
-from college_management.models import Timetable, ExamSchedule, Holiday
+from college_management.models import Timetable, ExamSchedule, Holiday, Announcement
 from .models import StudentNote, StudentResource, LibraryTransaction, FeePayment
 
 

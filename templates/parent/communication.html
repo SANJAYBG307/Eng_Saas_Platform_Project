@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Communication{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">Communication with Teachers</h2>
+            <p class="text-muted">Send messages and track responses</p>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                <i class="bi bi-plus-circle me-2"></i>New Message
+            </button>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            {% if communications %}
+                <div class="list-group list-group-flush">
+                    {% for comm in communications %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <h6 class="mb-1">{{ comm.subject }}</h6>
+                                    <small class="text-muted">
+                                        Regarding: {{ comm.student.get_full_name }}
+                                        {% if comm.teacher %} • To: {{ comm.teacher.get_full_name }}{% endif %}
+                                    </small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-{% if comm.priority == 'urgent' %}danger{% elif comm.priority == 'high' %}warning{% else %}info{% endif %} me-2">
+                                        {{ comm.get_priority_display }}
+                                    </span>
+                                    <span class="badge bg-{% if comm.status == 'resolved' %}success{% elif comm.status == 'replied' %}info{% else %}warning{% endif %}">
+                                        {{ comm.get_status_display }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <p class="mb-2">{{ comm.message }}</p>
+                            
+                            {% if comm.reply %}
+                                <div class="alert alert-light mt-2">
+                                    <strong>Reply:</strong><br>
+                                    {{ comm.reply }}
+                                    <br><small class="text-muted">Replied by {{ comm.replied_by.get_full_name }} on {{ comm.replied_at|date:"M d, Y" }}</small>
+                                </div>
+                            {% endif %}
+                            
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>{{ comm.created_at|date:"M d, Y H:i" }}
+                            </small>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if communications.has_other_pages %}
+                    <nav class="mt-3">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if communications.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ communications.previous_page_number }}">Previous</a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in communications.paginator.page_range %}
+                                <li class="page-item {% if communications.number == num %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if communications.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ communications.next_page_number }}">Next</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <p class="text-muted text-center py-4">No communications yet. Start a conversation with teachers.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- New Message Modal -->
+<div class="modal fade" id="newMessageModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Select Child <span class="text-danger">*</span></label>
+                        <select name="student" class="form-select" required>
+                            <option value="">Choose child...</option>
+                            {% for child in children %}
+                                <option value="{{ child.id }}">{{ child.get_full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Teacher (optional)</label>
+                        <input type="text" name="teacher" class="form-control" placeholder="Leave blank for general inquiry">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Subject <span class="text-danger">*</span></label>
+                        <input type="text" name="subject" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Message <span class="text-danger">*</span></label>
+                        <textarea name="message" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Message Type</label>
+                            <select name="message_type" class="form-select">
+                                <option value="inquiry">Inquiry</option>
+                                <option value="concern">Concern</option>
+                                <option value="request">Request</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="appreciation">Appreciation</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Priority</label>
+                            <select name="priority" class="form-select">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

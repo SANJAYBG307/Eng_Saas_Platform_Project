@@ -31,7 +31,10 @@ urlpatterns = [
     path('teacher/', include('teacher.urls', namespace='teacher')),
     
     # Student App
-    path('student/', include('student.urls', namespace='student'))
+    path('student/', include('student.urls', namespace='student')),
+    
+    # Parent App
+    path('parent/', include('parent.urls', namespace='parent'))
     # path('teacher/', include('teacher.urls', namespace='teacher')),
     
     # Student App - TODO: Build

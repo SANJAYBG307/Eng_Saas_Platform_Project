@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Reports</h2>
+            <p class="text-muted">Generate comprehensive reports for your children</p>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle me-2"></i>Report generation module coming soon. This will include performance reports, attendance reports, fee reports, and progress tracking.
+    </div>
+
+    <div class="row g-3">
+        {% for child in children %}
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 fw-bold">{{ child.get_full_name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary" disabled>
+                                <i class="bi bi-file-earmark-text me-2"></i>Performance Report
+                            </button>
+                            <button class="btn btn-outline-success" disabled>
+                                <i class="bi bi-calendar-check me-2"></i>Attendance Report
+                            </button>
+                            <button class="btn btn-outline-warning" disabled>
+                                <i class="bi bi-cash-stack me-2"></i>Fee Statement
+                            </button>
+                            <button class="btn btn-outline-info" disabled>
+                                <i class="bi bi-graph-up me-2"></i>Progress Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>No children linked to your account.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

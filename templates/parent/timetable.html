@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ child.get_full_name }} - Timetable{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">{{ child.get_full_name }} - Timetable</h2>
+            <p class="text-muted">{{ section.name }} • Weekly Schedule</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="10%">Period</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for period in periods %}
+                            <tr>
+                                <td class="fw-bold text-center">{{ period }}</td>
+                                {% for day in days %}
+                                    <td>
+                                        {% for class in timetable %}
+                                            {% if class.day_of_week == day and class.period_number == period %}
+                                                <div class="p-2 bg-primary bg-opacity-10 rounded">
+                                                    <strong>{{ class.subject.name }}</strong><br>
+                                                    <small class="text-muted">{{ class.room_number }}</small>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

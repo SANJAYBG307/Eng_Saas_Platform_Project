@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ child.get_full_name }} - Performance{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">{{ child.get_full_name }}</h2>
+            <p class="text-muted">{{ section.name }} • Performance Overview</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'parent:dashboard' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Performance Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Average Performance</h6>
+                    <h3 class="mb-0 fw-bold text-primary">{{ avg_percentage }}%</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Assignment Completion</h6>
+                    <h3 class="mb-0 fw-bold text-success">{{ completion_rate }}%</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Total Assignments</h6>
+                    <h3 class="mb-0 fw-bold">{{ total_assignments }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h6 class="text-muted mb-2">Completed</h6>
+                    <h3 class="mb-0 fw-bold text-info">{{ completed_assignments }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <a href="{% url 'parent:attendance_tracking' child.id %}" class="btn btn-outline-primary w-100">
+                <i class="bi bi-calendar-check me-2"></i>View Attendance
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'parent:grades_view' child.id %}" class="btn btn-outline-success w-100">
+                <i class="bi bi-trophy me-2"></i>View Grades
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'parent:fee_payments' child.id %}" class="btn btn-outline-warning w-100">
+                <i class="bi bi-cash-stack me-2"></i>View Fees
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="{% url 'parent:timetable' child.id %}" class="btn btn-outline-info w-100">
+                <i class="bi bi-table me-2"></i>View Timetable
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Grades -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">Recent Grades</h5>
+                        <a href="{% url 'parent:grades_view' child.id %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if recent_grades %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Exam</th>
+                                        <th>Date</th>
+                                        <th>Marks</th>
+                                        <th>Grade</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for grade in recent_grades %}
+                                        <tr>
+                                            <td>{{ grade.subject.name }}</td>
+                                            <td>{{ grade.exam_name }}</td>
+                                            <td>{{ grade.exam_date }}</td>
+                                            <td>{{ grade.marks_obtained }}/{{ grade.max_marks }}</td>
+                                            <td><span class="badge bg-primary">{{ grade.grade }}</span></td>
+                                            <td>{{ grade.percentage|floatformat:2 }}%</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No grades published yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
