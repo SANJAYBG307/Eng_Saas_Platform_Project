@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Results{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="fw-bold mb-4">Exam Results - {{ department.name }}</h2>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Exam</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exam in exams %}
+                            <tr>
+                                <td>{{ exam.exam_name }}</td>
+                                <td>{{ exam.get_exam_type_display }}</td>
+                                <td>{{ exam.start_date|date:"M d, Y" }}</td>
+                                <td><span class="badge bg-success">Published</span></td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No exams</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

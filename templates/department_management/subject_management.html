@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Subject Management{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="fw-bold mb-4">Subjects - {{ department.name }}</h2>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                {% for subject in subjects %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card border">
+                            <div class="card-body">
+                                <h6 class="fw-bold">{{ subject.code }}</h6>
+                                <p class="mb-0">{{ subject.name }}</p>
+                                <small class="text-muted">Credits: {{ subject.credits }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No subjects</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -24,8 +24,8 @@ urlpatterns = [
     # College Management App (Tenant Admin)
     path('admin/', include('college_management.urls', namespace='college')),
     
-    # Department Management App (Department Admin/HOD) - TODO: Build
-    # path('dept/', include('department_management.urls', namespace='department')),
+    # Department Management App (Department Admin/HOD)
+    path('dept/', include('department_management.urls', namespace='department')),
     
     # Teacher App - TODO: Build
     # path('teacher/', include('teacher.urls', namespace='teacher')),

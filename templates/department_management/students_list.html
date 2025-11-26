@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Students - {{ department.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Students - {{ department.name }}</h2>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <form method="get">
+                <select name="section" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Sections</option>
+                    {% for section in sections %}
+                        <option value="{{ section.id }}" {% if section_filter == section.id|stringformat:"s" %}selected{% endif %}>
+                            {{ section.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control" placeholder="Search students..." value="{{ search }}">
+                <button type="submit" class="btn btn-primary ms-2">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Section</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                            <tr>
+                                <td>{{ enrollment.roll_number }}</td>
+                                <td>{{ enrollment.student.get_full_name }}</td>
+                                <td>{{ enrollment.section.name }}</td>
+                                <td>{{ enrollment.student.email }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-4">No students found</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

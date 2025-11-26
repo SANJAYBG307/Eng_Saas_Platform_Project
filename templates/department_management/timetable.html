@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Timetable{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <h2 class="fw-bold mb-4">Department Timetable - {{ department.name }}</h2>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Section</th>
+                            <th>Day</th>
+                            <th>Period</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in timetable_entries %}
+                            <tr>
+                                <td>{{ entry.section.name }}</td>
+                                <td>{{ entry.get_day_of_week_display }}</td>
+                                <td>{{ entry.period_number }}</td>
+                                <td>{{ entry.subject.name }}</td>
+                                <td>{{ entry.teacher.get_full_name }}</td>
+                                <td>{{ entry.start_time }} - {{ entry.end_time }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No timetable entries</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
