@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
@@ -21,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     
     {% block extra_css %}{% endblock %}
     
@@ -343,8 +344,7 @@
                         {% if tenant and tenant.logo %}
                             <img src="{{ tenant.logo.url }}" alt="{{ tenant.name }}" style="height: 32px;">
                         {% else %}
-                            <i class="bi bi-mortarboard-fill"></i>
-                            <span>{{ tenant.name|default:SITE_NAME }}</span>
+                            <img src="{% static 'images/logo.png' %}" alt="Engineering SaaS Platform" style="height: 32px; max-width: 180px;">
                         {% endif %}
                     </a>
                 </div>
@@ -397,7 +397,7 @@
                             {% if user.profile_picture %}
                                 <img src="{{ user.profile_picture.url }}" alt="{{ user.get_full_name }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                             {% else %}
-                                {{ user.first_name.0 }}{{ user.last_name.0 }}
+                                <img src="{% static 'images/avatars/avatar-' %}{{ user.role }}.png" alt="{{ user.role }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" onerror="this.outerHTML='<div style=&quot;width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #4a90e2; color: white; border-radius: 50%; font-weight: 600;&quot;>{{ user.first_name.0 }}{{ user.last_name.0 }}</div>'">
                             {% endif %}
                         </div>
                         
@@ -455,7 +455,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
     
     <script>
         // Sidebar Toggle (Mobile)

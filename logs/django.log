@@ -1,0 +1,67 @@
+INFO 2025-11-26 22:11:21,404 autoreload Watching for file changes with StatReloader
+INFO 2025-11-26 22:11:48,611 basehttp "GET /?id=63118175-02b6-4149-a56f-14c3f57e4080&vscodeBrowserReqId=1764175308411 HTTP/1.1" 200 12017
+INFO 2025-11-26 22:12:15,505 basehttp "GET /?id=63118175-02b6-4149-a56f-14c3f57e4080&vscodeBrowserReqId=1764175335485 HTTP/1.1" 200 12017
+INFO 2025-11-26 22:12:22,780 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:12:23,327 basehttp "GET /static/js/custom.js HTTP/1.1" 200 21177
+INFO 2025-11-26 22:12:23,411 basehttp "GET /static/css/custom.css HTTP/1.1" 200 17883
+INFO 2025-11-26 22:12:23,487 basehttp "GET /static/images/favicon.ico HTTP/1.1" 200 178
+WARNING 2025-11-26 22:12:30,243 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:12:30,245 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:14:16,090 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:14:16,198 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:14:16,200 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:14:16,253 basehttp "GET /static/images/favicon.ico HTTP/1.1" 304 0
+INFO 2025-11-26 22:14:30,129 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:14:30,188 basehttp "GET /static/js/custom.js HTTP/1.1" 304 0
+INFO 2025-11-26 22:14:31,627 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:18:50,636 autoreload Watching for file changes with StatReloader
+INFO 2025-11-26 22:18:55,802 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:18:55,894 basehttp "GET /static/css/custom.css HTTP/1.1" 304 0
+INFO 2025-11-26 22:18:55,906 basehttp "GET /static/js/custom.js HTTP/1.1" 304 0
+INFO 2025-11-26 22:18:55,959 basehttp "GET /static/images/favicon.ico HTTP/1.1" 304 0
+INFO 2025-11-26 22:19:02,177 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:19:03,171 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:29:50,577 autoreload Watching for file changes with StatReloader
+INFO 2025-11-26 22:29:54,571 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:29:54,604 basehttp "GET /static/css/custom.css HTTP/1.1" 304 0
+INFO 2025-11-26 22:29:54,614 basehttp "GET /static/js/custom.js HTTP/1.1" 304 0
+INFO 2025-11-26 22:29:54,638 basehttp "GET /static/images/favicon.ico HTTP/1.1" 304 0
+INFO 2025-11-26 22:29:56,656 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:29:59,865 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:30:00,275 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:02,493 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:02,493 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:03,863 basehttp "GET /?id=09614b20-6f95-45ce-ab85-470d599a6bc4&vscodeBrowserReqId=1764176403831 HTTP/1.1" 200 12017
+INFO 2025-11-26 22:30:08,544 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:08,614 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:08,620 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:09,108 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:09,182 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:09,195 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:22,189 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:22,300 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:22,311 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:22,920 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:22,982 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:22,983 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:23,557 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:30:23,618 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:30:23,620 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:30:59,542 autoreload Watching for file changes with StatReloader
+INFO 2025-11-26 22:31:20,701 basehttp "GET / HTTP/1.1" 200 12017
+WARNING 2025-11-26 22:31:20,760 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:31:20,762 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:31:46,562 basehttp "GET / HTTP/1.1" 200 12017
+INFO 2025-11-26 22:32:20,221 basehttp "GET / HTTP/1.1" 200 21443
+INFO 2025-11-26 22:32:32,347 basehttp "GET / HTTP/1.1" 200 21443
+WARNING 2025-11-26 22:32:32,433 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:32:32,434 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+INFO 2025-11-26 22:32:44,701 basehttp "GET /signup/?plan=3b3a6575-3d68-4d26-9f02-4d463a799746 HTTP/1.1" 200 10639
+INFO 2025-11-26 22:32:49,744 basehttp "GET /signup/?plan=3b3a6575-3d68-4d26-9f02-4d463a799746 HTTP/1.1" 200 10639
+INFO 2025-11-26 22:33:07,155 basehttp "GET /contact-sales/ HTTP/1.1" 200 10651
+WARNING 2025-11-26 22:33:11,030 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:33:11,032 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+WARNING 2025-11-26 22:33:14,782 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:33:14,801 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
+WARNING 2025-11-26 22:33:14,916 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-11-26 22:33:14,929 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7409
