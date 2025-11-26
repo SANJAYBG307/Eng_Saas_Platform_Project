@@ -1,0 +1,25 @@
+# Coverage configuration
+
+[run]
+source = .
+omit = 
+    */migrations/*
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */staticfiles/*
+    */mediafiles/*
+    manage.py
+    */wsgi.py
+    */asgi.py
+    */settings*.py
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov

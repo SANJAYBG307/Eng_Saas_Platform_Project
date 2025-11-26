@@ -7,8 +7,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from core.health_views import health_check, readiness_check, liveness_check
 
 urlpatterns = [
+    # Health check endpoints
+    path('health/', health_check, name='health_check'),
+    path('readiness/', readiness_check, name='readiness_check'),
+    path('liveness/', liveness_check, name='liveness_check'),
+    
     # Django Admin
     path('django-admin/', admin.site.urls),
     
