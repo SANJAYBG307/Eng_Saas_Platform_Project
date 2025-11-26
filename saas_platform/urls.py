@@ -24,8 +24,8 @@ urlpatterns = [
     # Company Admin App (Super Admin)
     path('company/', include('company_admin.urls', namespace='company_admin')),
     
-    # Tenant Subscription App (Public) - TODO: Build models
-    # path('', include('tenant_subscription.urls', namespace='subscription')),
+    # Tenant Subscription App (Public)
+    path('', include('tenant_subscription.urls', namespace='subscription')),
     
     # College Management App (Tenant Admin)
     path('admin/', include('college_management.urls', namespace='college')),
