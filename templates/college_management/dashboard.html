@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}College Dashboard - {{ request.user.tenant.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">College Dashboard</h2>
+            <p class="text-muted">Welcome back, {{ request.user.get_full_name }}</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-2">Departments</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_departments }}</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 text-primary p-3 rounded">
+                            <i class="bi bi-building fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-2">Sections</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_sections }}</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 text-success p-3 rounded">
+                            <i class="bi bi-grid-3x3 fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-2">Teachers</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_teachers }}</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 text-info p-3 rounded">
+                            <i class="bi bi-person-badge fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-2">Students</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_students }}</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 text-warning p-3 rounded">
+                            <i class="bi bi-people fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <!-- Recent Announcements -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">Recent Announcements</h5>
+                        <a href="{% url 'college_management:announcement_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if recent_announcements %}
+                        <div class="list-group list-group-flush">
+                            {% for announcement in recent_announcements %}
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ announcement.title }}</h6>
+                                        <small class="text-muted">{{ announcement.created_at|date:"M d" }}</small>
+                                    </div>
+                                    <p class="mb-1 text-muted small">{{ announcement.content|truncatewords:15 }}</p>
+                                    <small>
+                                        <span class="badge bg-{{ announcement.get_announcement_type_badge_color }}">
+                                            {{ announcement.get_announcement_type_display }}
+                                        </span>
+                                    </small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No announcements yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Holidays -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold">Upcoming Holidays</h5>
+                        <a href="{% url 'college_management:holiday_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_holidays %}
+                        <div class="list-group list-group-flush">
+                            {% for holiday in upcoming_holidays %}
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ holiday.name }}</h6>
+                                            <small class="text-muted">{{ holiday.date|date:"F d, Y" }}</small>
+                                        </div>
+                                        <span class="badge bg-success">{{ holiday.date|timeuntil }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No upcoming holidays.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if current_academic_year %}
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <strong>Current Academic Year:</strong> {{ current_academic_year.name }}
+                    ({{ current_academic_year.start_date|date:"M Y" }} - {{ current_academic_year.end_date|date:"M Y" }})
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

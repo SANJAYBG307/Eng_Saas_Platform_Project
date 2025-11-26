@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}College Settings{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">College Settings</h2>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+
+                <h5 class="mb-3">Academic Settings</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Semester System</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="semester_system" name="semester_system" 
+                                   {% if settings.semester_system %}checked{% endif %}>
+                            <label class="form-check-label" for="semester_system">Enable Semester System</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="grading_system" class="form-label">Grading System</label>
+                        <select class="form-select" id="grading_system" name="grading_system">
+                            <option value="percentage" {% if settings.grading_system == 'percentage' %}selected{% endif %}>Percentage</option>
+                            <option value="grade" {% if settings.grading_system == 'grade' %}selected{% endif %}>Grade (A-F)</option>
+                            <option value="cgpa" {% if settings.grading_system == 'cgpa' %}selected{% endif %}>CGPA</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <h5 class="mb-3">Attendance Settings</h5>
+                <div class="mb-3">
+                    <label for="minimum_attendance_percentage" class="form-label">Minimum Attendance Percentage</label>
+                    <input type="number" class="form-control" id="minimum_attendance_percentage" 
+                           name="minimum_attendance_percentage" value="{{ settings.minimum_attendance_percentage }}" min="0" max="100">
+                </div>
+
+                <hr class="my-4">
+
+                <h5 class="mb-3">Communication Settings</h5>
+                <div class="mb-3">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="sms_notifications_enabled" 
+                               name="sms_notifications_enabled" {% if settings.sms_notifications_enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="sms_notifications_enabled">Enable SMS Notifications</label>
+                    </div>
+
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="email_notifications_enabled" 
+                               name="email_notifications_enabled" {% if settings.email_notifications_enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="email_notifications_enabled">Enable Email Notifications</label>
+                    </div>
+
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="parent_portal_enabled" 
+                               name="parent_portal_enabled" {% if settings.parent_portal_enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="parent_portal_enabled">Enable Parent Portal</label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

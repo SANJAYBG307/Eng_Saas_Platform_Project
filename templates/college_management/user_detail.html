@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user_obj.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">{{ user_obj.get_full_name }}</h2>
+            <p class="text-muted">{{ user_obj.role.name|title }}</p>
+        </div>
+    </div>
+
+    <!-- User Info -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">Email</h6>
+                    <p>{{ user_obj.email }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Phone</h6>
+                    <p>{{ user_obj.phone_number|default:"Not provided" }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Status</h6>
+                    <p>
+                        {% if user_obj.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Joined</h6>
+                    <p>{{ user_obj.created_at|date:"F d, Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

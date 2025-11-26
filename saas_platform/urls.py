@@ -21,8 +21,8 @@ urlpatterns = [
     # Tenant Subscription App (Public) - TODO: Build models
     # path('', include('tenant_subscription.urls', namespace='subscription')),
     
-    # College Management App (Tenant Admin) - TODO: Build
-    # path('admin/', include('college_management.urls', namespace='college')),
+    # College Management App (Tenant Admin)
+    path('admin/', include('college_management.urls', namespace='college')),
     
     # Department Management App (Department Admin/HOD) - TODO: Build
     # path('dept/', include('department_management.urls', namespace='department')),

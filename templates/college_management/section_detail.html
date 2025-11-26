@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ section.name }} - {{ section.department.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">{{ section.name }}</h2>
+            <p class="text-muted">{{ section.department.name }}</p>
+        </div>
+    </div>
+
+    <!-- Section Info -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Class Teacher</h6>
+                    <p>{% if section.class_teacher %}{{ section.class_teacher.get_full_name }}{% else %}Not assigned{% endif %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Students</h6>
+                    <p><strong>{{ student_count }} / {{ section.capacity }}</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students List -->
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Students</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                            <tr>
+                                <td>{{ enrollment.roll_number }}</td>
+                                <td>{{ enrollment.student.get_full_name }}</td>
+                                <td>{{ enrollment.student.email }}</td>
+                                <td>
+                                    <a href="{% url 'college_management:user_detail' enrollment.student.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No students enrolled</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timetable -->
+    {% if timetable %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 fw-bold">Timetable</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Period</th>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for entry in timetable %}
+                                <tr>
+                                    <td>{{ entry.get_day_of_week_display }}</td>
+                                    <td>{{ entry.period_number }}</td>
+                                    <td>{{ entry.subject.name }}</td>
+                                    <td>{{ entry.teacher.get_full_name }}</td>
+                                    <td>{{ entry.start_time }} - {{ entry.end_time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ department.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold">{{ department.name }}</h2>
+                    <p class="text-muted">{{ department.code }}</p>
+                </div>
+                <a href="{% url 'college_management:department_edit' department.id %}" class="btn btn-primary">
+                    <i class="bi bi-pencil me-2"></i>Edit Department
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Info -->
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">Head of Department</h6>
+                    <p>{% if department.hod %}{{ department.hod.get_full_name }}{% else %}Not assigned{% endif %}</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-muted">Description</h6>
+                    <p>{{ department.description|default:"No description" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sections -->
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Sections ({{ sections.count }})</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Section</th>
+                            <th>Class Teacher</th>
+                            <th>Students</th>
+                            <th>Capacity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for section in sections %}
+                            <tr>
+                                <td><a href="{% url 'college_management:section_detail' section.id %}">{{ section.name }}</a></td>
+                                <td>{% if section.class_teacher %}{{ section.class_teacher.get_full_name }}{% else %}-{% endif %}</td>
+                                <td>{{ section.student_count }}</td>
+                                <td>{{ section.capacity }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No sections</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subjects -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold">Subjects</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for subject in subjects %}
+                    <div class="col-md-4 mb-2">
+                        <div class="border rounded p-2">
+                            <strong>{{ subject.code }}</strong> - {{ subject.name }}
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No subjects</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
