@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Assignments</h2>
+            <p class="text-muted">View and submit assignments</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Subject</th>
+                            <th>Due Date</th>
+                            <th>Max Marks</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assignment in assignments %}
+                            <tr>
+                                <td>{{ assignment.title }}</td>
+                                <td>{{ assignment.subject.name }}</td>
+                                <td>{{ assignment.due_date }}</td>
+                                <td>{{ assignment.max_marks }}</td>
+                                <td>
+                                    {% if assignment.assignmentsubmission_set.filter|default:False %}
+                                        <span class="badge bg-success">Submitted</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'student:assignment_detail' assignment.id %}" class="btn btn-sm btn-outline-primary">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">No assignments available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if assignments.has_other_pages %}
+                <nav>
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if assignments.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ assignments.previous_page_number }}">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% for num in assignments.paginator.page_range %}
+                            <li class="page-item {% if assignments.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if assignments.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ assignments.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

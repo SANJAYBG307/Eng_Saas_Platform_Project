@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Study Resources{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold">Study Resources</h2>
+            <p class="text-muted">Download study materials and resources</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        {% for resource in resources %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">{{ resource.title }}</h5>
+                            <span class="badge bg-primary">{{ resource.get_resource_type_display }}</span>
+                        </div>
+                        
+                        <p class="mb-2"><strong>Subject:</strong> {{ resource.subject.name }}</p>
+                        <p class="mb-3"><strong>Uploaded:</strong> {{ resource.created_at|date:"M d, Y" }}</p>
+
+                        <div class="d-grid gap-2">
+                            {% if resource.file %}
+                                <a href="{{ resource.file.url }}" class="btn btn-outline-primary" target="_blank">
+                                    <i class="bi bi-download me-1"></i>Download
+                                </a>
+                            {% elif resource.url %}
+                                <a href="{{ resource.url }}" class="btn btn-outline-primary" target="_blank">
+                                    <i class="bi bi-link-45deg me-1"></i>Open Link
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>No resources available yet.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if resources.has_other_pages %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if resources.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ resources.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for num in resources.paginator.page_range %}
+                    <li class="page-item {% if resources.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if resources.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ resources.next_page_number }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+{% endblock %}

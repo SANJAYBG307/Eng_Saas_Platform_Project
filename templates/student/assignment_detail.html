@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ assignment.title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="fw-bold">{{ assignment.title }}</h2>
+            <p class="text-muted">{{ assignment.subject.name }} • Due: {{ assignment.due_date }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'student:assignments' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Back
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0 fw-bold">Assignment Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Description:</strong>
+                        <p class="mt-2">{{ assignment.description|default:"No description provided." }}</p>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <strong>Max Marks:</strong>
+                            <p>{{ assignment.max_marks }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Due Date:</strong>
+                            <p>{{ assignment.due_date }}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Late Submission:</strong>
+                            <p>{% if assignment.allow_late_submission %}Allowed{% else %}Not Allowed{% endif %}</p>
+                        </div>
+                    </div>
+
+                    {% if assignment.attachment %}
+                        <a href="{{ assignment.attachment.url }}" class="btn btn-outline-primary" target="_blank">
+                            <i class="bi bi-download me-2"></i>Download Assignment
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if submission %}
+                <!-- Submission Status -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 fw-bold">Your Submission</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle me-2"></i>Assignment submitted successfully!
+                        </div>
+
+                        <div class="mb-3">
+                            <strong>Submission Date:</strong>
+                            <p>{{ submission.submission_date }}</p>
+                        </div>
+
+                        {% if submission.is_late %}
+                            <span class="badge bg-warning mb-3">Late Submission</span>
+                        {% endif %}
+
+                        {% if submission.attachment %}
+                            <div class="mb-3">
+                                <strong>Submitted File:</strong><br>
+                                <a href="{{ submission.attachment.url }}" target="_blank">View File</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <strong>Status:</strong>
+                            <span class="badge bg-{% if submission.status == 'graded' %}success{% else %}warning{% endif %}">
+                                {{ submission.get_status_display }}
+                            </span>
+                        </div>
+
+                        {% if submission.marks_obtained is not None %}
+                            <div class="mb-3">
+                                <strong>Marks Obtained:</strong>
+                                <p class="fs-5 fw-bold text-primary">{{ submission.marks_obtained }}/{{ assignment.max_marks }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if submission.feedback %}
+                            <div class="mb-3">
+                                <strong>Teacher Feedback:</strong>
+                                <p class="mt-2">{{ submission.feedback }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <!-- Submission Form -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 fw-bold">Submit Assignment</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Upload File <span class="text-danger">*</span></label>
+                                <input type="file" name="file" class="form-control" required>
+                                <small class="text-muted">Upload your assignment (PDF, DOC, DOCX, etc.)</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Remarks (optional)</label>
+                                <textarea name="remarks" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-upload me-2"></i>Submit Assignment
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0 fw-bold">Quick Info</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">Section</small>
+                        <p class="mb-0">{{ assignment.section.name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Teacher</small>
+                        <p class="mb-0">{{ assignment.teacher.get_full_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Created</small>
+                        <p class="mb-0">{{ assignment.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
